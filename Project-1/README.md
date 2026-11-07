@@ -1,6 +1,6 @@
 # DecodeLabs Data Science, Project 1: Advanced EDA & Feature Engineering
 
-**Intern:** Praise · **Programme:** DecodeLabs Data Science, Batch 2026 · **Instructor:** Vishal Rajpoot
+**Intern:** Praise · **Programme:** DecodeLabs Data Science, November 2026 Batch · **Instructor:** Vishal Rajpoot
 
 This project turns a raw e-commerce order dataset (1,200 orders, 14 columns) into a clean, machine-learning-ready dataset. Every decision is written down in the notebook so a reviewer can follow and challenge it.
 
