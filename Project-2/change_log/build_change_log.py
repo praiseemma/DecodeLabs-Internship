@@ -562,6 +562,14 @@ notebook's recorded scores.</p>
   <li><b>A6.</b> The 0.50 threshold is a business trade-off, not a statistical optimum. It assumes a false alarm
       costs much less than a missed fraud. A real deployment would set it from the actual costs of investigation
       and of blocking a customer.</li>
+  <li><b>A7.</b> The test set was used once, to choose between the two models. The deployed model's scores are
+      therefore slightly optimistic: it was picked because it looked better on this data. The cross-validated
+      training estimate, which never touches the test set, gives precision
+      {num(s50['precision'], 3)} and recall {num(s50['recall'], 3)} at 0.50, against
+      {num(at_50['precision'], 3)} and {num(at_50['recall'], 3)} on the test set. That closeness suggests the
+      optimism is small, but it does not prove it, and it cannot be measured from this data. A stricter study
+      would choose the model on a separate validation split, or by nested cross-validation, and touch the test
+      set once for the winner.</li>
 </ul>
 
 <h2>8. What a score means, measured</h2>

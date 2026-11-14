@@ -1,3 +1,7 @@
+# Deploy on Python 3.13 (or 3.12). Not 3.14: streamlit==1.51.0 needs
+# pyarrow<22, and pyarrow publishes no prebuilt wheel for 3.14, so the
+# installer tries to compile Arrow and fails with "Error installing
+# requirements". On 3.13 the whole file installs from wheels in about a minute.
 streamlit==1.51.0
 scikit-learn==1.7.2
 imbalanced-learn==0.14.0

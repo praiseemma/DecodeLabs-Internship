@@ -6,7 +6,7 @@ A Streamlit app that serves the Random Forest from
 The model was trained on the Kaggle *Credit Card Fraud Detection* dataset
 (283,726 transactions after removing duplicates, of which 473 are fraud). It reaches
 **0.6016 precision** and **0.8105 recall** on 56,746 held-back test rows at a
-threshold of 0.50. This app reproduces those numbers exactly â€” the export script
+threshold of 0.50. This app reproduces those numbers exactly — the export script
 refuses to finish unless it does.
 
 ---
@@ -16,7 +16,7 @@ refuses to finish unless it does.
 | Path | What it is |
 |---|---|
 | `app.py` | Entry point. Sets up navigation, the sidebar status panel and the page list. |
-| `src/config.py` | Paths, the 30 model inputs, colours and limits â€” the things every file must agree on. |
+| `src/config.py` | Paths, the 30 model inputs, colours and limits — the things every file must agree on. |
 | `src/state.py` | The only place that loads the model and the exported numbers, both cached. |
 | `src/model.py` | Loading and scoring the pipeline, version checks, plain-language reading of a score. |
 | `src/validation.py` | One set of input rules, used by both the single-row page and the upload page. |
@@ -38,7 +38,7 @@ Open **PowerShell**, then move into the dashboard folder:
 cd "$env:USERPROFILE\Documents\GitHub\DecodeLabs-Internship\Project-2\dashboard"
 ```
 
-**Step 1 â€” install the pinned libraries** (once; a few minutes):
+**Step 1 — install the pinned libraries** (once; a few minutes):
 
 ```powershell
 & "$env:USERPROFILE\anaconda3\python.exe" -m pip install -r requirements.txt
@@ -48,7 +48,7 @@ This installs the exact versions the model was saved with. Running a pickled
 model under a different scikit-learn version can change its predictions quietly,
 which is why the versions are pinned rather than "latest".
 
-**Step 2 â€” start the app:**
+**Step 2 — start the app:**
 
 ```powershell
 & "$env:USERPROFILE\anaconda3\python.exe" -m streamlit run app.py
@@ -61,7 +61,7 @@ stops the app. Press `Ctrl+C` in PowerShell to stop it yourself.
 > full path above avoids that. If your Anaconda lives somewhere else, run
 > `Get-Command python` in a fresh PowerShell and use the path it prints.
 
-**Optional â€” check everything still works:**
+**Optional — check everything still works:**
 
 ```powershell
 & "$env:USERPROFILE\anaconda3\python.exe" -m pytest -q
@@ -109,14 +109,23 @@ Two flags are worth knowing:
 
 ## Deploy to Streamlit Community Cloud (free)
 
+> **Choose Python 3.13 in Advanced settings** — not the default, and not 3.14.
+> `streamlit==1.51.0` needs `pyarrow<22`, and `pyarrow` publishes no prebuilt
+> wheel for Python 3.14. On 3.14 the installer tries to compile Arrow from
+> source and stops with **"Error installing requirements"**. On 3.13 (or 3.12)
+> the whole file installs from wheels in about a minute.
+
 1. Push this folder to the public GitHub repository, including `artifacts/`,
    `data/demo_transactions.csv`, `app.py` and `requirements.txt`.
 2. Go to <https://share.streamlit.io> and sign in with GitHub.
-3. **New app** â†’ pick the repository `praiseemma/DecodeLabs-Internship`, branch
+3. **New app** → pick the repository `praiseemma/DecodeLabs-Internship`, branch
    `main`.
 4. **Main file path:** `Project-2/dashboard/app.py`
-5. **Advanced settings â†’ Python version:** choose **3.13** to match the
-   environment the model was saved in. Then **Deploy**.
+5. **Advanced settings → Python version:** choose **3.13**. Then **Deploy**.
+
+Streamlit Cloud fixes the Python version when an app is created. If an existing
+app was made on 3.14, create a new app from the same repository with 3.13 and
+delete the broken one. The build log's first lines say which Python is in use.
 
 Nothing needs to be set in Secrets: the app has no keys and calls no APIs.
 
@@ -182,5 +191,6 @@ page.
 | "The dashboard has no model yet" | Run `scripts/export_model.py` from `Project-2`; the dataset must be in `Project-2/data/`. |
 | "Could not find the dataset at ..." | `creditcard.csv` is not stored in git. Put it in `Project-2/data/`, or pass `--data PATH`. |
 | "The model file could not be read" | The pickle was written by a different scikit-learn version. Install `requirements.txt`, then re-run the export. |
+| Cloud: "Error installing requirements" | The app was created on Python 3.14. Recreate it with Python 3.13 (Advanced settings); see the deploy section above. |
 | `python` opens the Microsoft Store | Use the full Anaconda path shown above. |
 | Port 8501 already in use | Another copy is running. Close it, or `... -m streamlit run app.py --server.port 8502`. |
