@@ -45,9 +45,3 @@ def decision_badge(is_fraud: bool, threshold: float) -> None:
             f"**Passed as legitimate** at a cut-off of {threshold:.2f}. "
             "No action would be taken."
         )
-
-
-def stat_line(label: str, value: str, help_text: str = "") -> None:
-    st.markdown(f"**{label}:** {value}")
-    if help_text:
-        st.caption(help_text)

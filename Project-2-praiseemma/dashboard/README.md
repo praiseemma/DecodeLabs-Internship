@@ -1,7 +1,7 @@
 ﻿# Fraud detection dashboard
 
 A Streamlit app that serves the Random Forest from
-`Project-2/project2_fraud_detection_pipeline.ipynb`, plus the evidence behind it.
+`Project-2-praiseemma/project2_fraud_detection_pipeline.ipynb`, plus the evidence behind it.
 
 The model was trained on the Kaggle *Credit Card Fraud Detection* dataset
 (283,726 transactions after removing duplicates, of which 473 are fraud). It reaches
@@ -26,7 +26,21 @@ refuses to finish unless it does.
 | `scripts/export_model.py` | Rebuilds the model from the dataset, checks it against the notebook, writes `artifacts/`. |
 | `artifacts/` | The committed model (1.5 MB), `results.json`, `predictions.npz`. Produced by the script above. |
 | `data/demo_transactions.csv` | 2,473-row sample: all 473 frauds plus 2,000 legitimate transactions. |
-| `tests/` | 80 pytest checks: input rules, scoring, the saved numbers, the committed artifacts, and every page rendered through Streamlit's own test runner. |
+| `tests/` | 82 pytest checks: input rules, scoring, the saved numbers, the committed artifacts, and every page rendered through Streamlit's own test runner. |
+| `requirements.txt` | The pinned library versions the model was saved with. |
+| `.streamlit/config.toml` | Theme colours, `headless = true` (no browser tab opens) and usage statistics off. |
+| `pytest.ini` | Tells pytest where the tests are and hides one noisy warning. |
+
+Everything above lives in `dashboard/`. One level up, in `Project-2-praiseemma/`:
+
+| Path | What it is |
+|---|---|
+| `project2_fraud_detection_pipeline.ipynb` | The notebook that cleans the data, tunes both models and produces every number the app shows. |
+| `Project2_Change_Log.pdf` | The record of each decision that changed the data, with its measured effect. |
+| `outputs/model_comparison.csv` | The notebook's final comparison of Logistic Regression, Random Forest and the baseline. |
+| `data/creditcard.csv` | The 150 MB Kaggle dataset the model was trained on. Not committed. |
+| `Data Split script.ipynb` | Splits that file into the four `creditcard_part*.csv.gz` files. Not committed. |
+| `creditcard_part*.csv.gz` | The same dataset in four gzip parts, 65 MB in total. Not committed. |
 
 ---
 
@@ -35,7 +49,7 @@ refuses to finish unless it does.
 Open **PowerShell**, then move into the dashboard folder:
 
 ```powershell
-cd "$env:USERPROFILE\Documents\GitHub\DecodeLabs-Internship\Project-2\dashboard"
+cd "$env:USERPROFILE\Documents\GitHub\DecodeLabs-Internship\Project-2-praiseemma\dashboard"
 ```
 
 **Step 1 — install the pinned libraries** (once; a few minutes):
@@ -54,8 +68,10 @@ which is why the versions are pinned rather than "latest".
 & "$env:USERPROFILE\anaconda3\python.exe" -m streamlit run app.py
 ```
 
-A browser tab opens at `http://localhost:8501`. Leave PowerShell open; closing it
-stops the app. Press `Ctrl+C` in PowerShell to stop it yourself.
+Open `http://localhost:8501` in your browser. It does not open by itself:
+`.streamlit/config.toml` sets `[server] headless = true`, which tells Streamlit not to
+launch a tab. Leave PowerShell open; closing it stops the app. Press `Ctrl+C` in
+PowerShell to stop it yourself.
 
 > `python` on its own may open the Microsoft Store instead of Anaconda. Using the
 > full path above avoids that. If your Anaconda lives somewhere else, run
@@ -67,7 +83,7 @@ stops the app. Press `Ctrl+C` in PowerShell to stop it yourself.
 & "$env:USERPROFILE\anaconda3\python.exe" -m pytest -q
 ```
 
-80 tests, about 12 seconds. They cover the input rules, scoring of known rows, the
+82 tests, about 18 seconds. They cover the input rules, scoring of known rows, the
 saved metrics against the notebook, the size of the committed files, and every page
 rendered through `streamlit.testing` (including moving the threshold slider and
 scoring the demo file).
@@ -79,14 +95,14 @@ scoring the demo file).
 The committed `artifacts/` folder is enough to run the app. You only need this
 step if you retrain, or if you want to verify the numbers yourself.
 
-Put `creditcard.csv` (about 150 MB) in `Project-2/data/`, then from `Project-2`:
+Put `creditcard.csv` (about 150 MB) in `Project-2-praiseemma/data/`, then from
+`Project-2-praiseemma`:
 
 ```powershell
 & "$env:USERPROFILE\anaconda3\python.exe" dashboard\scripts\export_model.py
 ```
 
-It takes about 7 minutes, most of it the cross-validated training-set sweep. It
-ends with:
+It takes about 7 minutes. It ends with:
 
 ```text
 [PASS] precision   notebook 0.6016 | now 0.6016
@@ -99,9 +115,9 @@ If any line says FAIL, do not deploy that model.
 
 Two flags are worth knowing:
 
-- `--retune` re-runs the whole `GridSearchCV` (about 10 extra minutes) instead of
-  using the winning settings the notebook already recorded, and reports whether
-  the search picks the same ones again.
+- `--retune` re-runs the whole `GridSearchCV` instead of using the winning
+  settings the notebook already recorded, and reports whether the search picks
+  the same ones again.
 - `--no-oof` skips the slow cross-validated sweep. The threshold explorer then
   loses its honest view and says so on the page.
 
@@ -120,7 +136,7 @@ Two flags are worth knowing:
 2. Go to <https://share.streamlit.io> and sign in with GitHub.
 3. **New app** → pick the repository `praiseemma/DecodeLabs-Internship`, branch
    `main`.
-4. **Main file path:** `Project-2/dashboard/app.py`
+4. **Main file path:** `Project-2-praiseemma/dashboard/app.py`
 5. **Advanced settings → Python version:** choose **3.13**. Then **Deploy**.
 
 Streamlit Cloud fixes the Python version when an app is created. If an existing
@@ -159,7 +175,7 @@ page.
 | Paths built from `__file__` | Streamlit Cloud starts apps from the repository root while you start them from `dashboard/`. Hard-coded relative paths break in one of those two places. |
 | One `validate_batch` used by both entry points | A rule duplicated in two places gets fixed in one of them. The single-row form goes through the same code as the CSV upload. |
 | Every failure caught and rewritten | A visitor should read "this file has 2 empty values in `V7`", not a stack trace. |
-| No accuracy anywhere | The baseline scores 99.83% accuracy and catches no fraud. Precision, recall, F1, ROC-AUC and average precision instead. |
+| No accuracy as a model score | The baseline scores 99.83% accuracy and catches no fraud. Precision, recall, F1, ROC-AUC and average precision instead. |
 | Threshold default 0.50, adjustable | 0.50 is what the notebook kept: lowering it to 0.40 raised recall by 0.013 and cut precision by 0.160. The trade-off belongs to whoever owns the cost of a missed fraud. |
 | Test-set view labelled "illustration only" | Choosing a threshold on the test set destroys the test set's value. The default view is cross-validated training data. |
 | Reproduction check in the app, not just in a README | If the exported model ever stops matching the notebook, the app shows it rather than claiming a score it cannot back up. |
@@ -188,8 +204,8 @@ page.
 
 | Message | Fix |
 |---|---|
-| "The dashboard has no model yet" | Run `scripts/export_model.py` from `Project-2`; the dataset must be in `Project-2/data/`. |
-| "Could not find the dataset at ..." | `creditcard.csv` is not stored in git. Put it in `Project-2/data/`, or pass `--data PATH`. |
+| "The dashboard has no model yet" | Run `dashboard\scripts\export_model.py` from `Project-2-praiseemma`; the dataset must be in `Project-2-praiseemma/data/`. |
+| "Could not find the dataset at ..." | `creditcard.csv` is not stored in git. Put it in `Project-2-praiseemma/data/`, or pass `--data PATH`. |
 | "The model file could not be read" | The pickle was written by a different scikit-learn version. Install `requirements.txt`, then re-run the export. |
 | Cloud: "Error installing requirements" | The app was created on Python 3.14. Recreate it with Python 3.13 (Advanced settings); see the deploy section above. |
 | `python` opens the Microsoft Store | Use the full Anaconda path shown above. |

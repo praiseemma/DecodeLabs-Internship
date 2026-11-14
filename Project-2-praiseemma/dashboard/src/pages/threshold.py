@@ -108,8 +108,8 @@ st.plotly_chart(
     width="stretch", config=config.PLOTLY_CONFIG,
 )
 st.caption(
-    f"Precision and recall against the threshold. The dashed grey line is the default "
-    f"0.50; the solid black line is the threshold selected above."
+    "Precision and recall against the threshold. The dashed grey line is the default "
+    "0.50; the solid black line is the threshold selected above."
 )
 
 st.subheader("How the cut-off splits the two classes")

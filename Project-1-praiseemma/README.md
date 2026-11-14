@@ -13,7 +13,7 @@ The notebook follows the brief's Input → Process → Output structure.
 | 0 | Load, profile and explore the data |
 | 1 (Input) | Missing-value audit, integrity checks, imputation demonstration, outlier handling |
 | 2 (Process) | Vectorized feature engineering, one-hot encoding, collinearity removal |
-| 3 (Output) | Pandera schema validation, export, verification on the exported files, decision log |
+| 3 (Output) | Export, verification on the reloaded files, decision log |
 
 ## The three core requirements
 
@@ -21,7 +21,7 @@ The notebook follows the brief's Input → Process → Output structure.
 2. **Outlier handling (IQR and Z-score).** The IQR rule flags 8 `TotalPrice` values and the Z-score rule flags none. The flagged orders are valid, so they are capped with `np.clip` into a new column, `TotalPrice_capped`. No rows are deleted and the original `TotalPrice` is kept.
 3. **Feature engineering (5 new features).** `used_coupon`, `other_items_in_cart`, `order_month`, `is_weekend` and `price_tier`, all built with vectorized operations (no row loops).
 
-Beyond the core requirements, the notebook one-hot encodes the categorical columns with `drop_first=True`, removes features correlated above 0.80 (keeping whichever of each pair is more related to the target), and validates the final table with Pandera.
+Beyond the core requirements, the notebook one-hot encodes the categorical columns with `drop_first=True`, removes features correlated above 0.80 (keeping whichever of each pair is more related to the target), and validates the exported files with explicit assertions rather than with Pandera: unique OrderIDs, ISO 8601 dates, no missing values, an unchanged row count, the `TotalPrice = Quantity x UnitPrice` identity, and no remaining collinear pair. The brief recommends Pandera, but the notebook does not use it.
 
 ## Assumptions
 
@@ -34,8 +34,9 @@ The data looks synthetic (near-uniform values, evenly split statuses), so weak p
 ## Repository layout
 
 ```
-project-1/
+Project-1-praiseemma/
 ├── project1_eda_feature_engineering.ipynb
+├── Project1_Change_Log.pdf
 ├── requirements.txt
 └── data/
     ├── Dataset for Data Analytics.xlsx   (input)
@@ -51,3 +52,10 @@ project-1/
 3. Choose **Kernel → Restart & Run All**. Paths are relative to the notebook, so it must stay next to the `data/` folder.
 
 The three CSV files in `data/` are regenerated on every run.
+
+## The change log
+
+`Project1_Change_Log.pdf` records every decision that changed the data, with the measured effect
+of each: the missing-value audit, the imputation comparison, the outlier scan, the five new
+features, the two collinear columns that were removed, and a verification table showing the
+numbers in the document against the notebook's own output.

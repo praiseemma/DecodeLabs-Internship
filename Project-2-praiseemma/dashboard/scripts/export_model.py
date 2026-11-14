@@ -23,12 +23,12 @@ same settings, so the script builds them straight away. Pass --retune to re-run
 the full GridSearchCV and prove that for yourself; it writes a small report
 showing whether the search picks the same settings again.
 
-Usage (PowerShell, from the Project-2 folder)
+Usage (PowerShell, from the Project-2-praiseemma folder)
 ---------------------------------------------
     & "$env:USERPROFILE\anaconda3\python.exe" dashboard\scripts\export_model.py
 
 Optional flags:
-    --data PATH     where creditcard.csv lives  (default Project-2/data/creditcard.csv)
+    --data PATH     where creditcard.csv lives  (default Project-2-praiseemma/data/creditcard.csv)
     --retune        re-run GridSearchCV instead of using the recorded settings
     --no-oof        skip the (slow) cross-validated training-set probabilities
 """
@@ -40,7 +40,6 @@ import json
 import platform
 import sys
 import time
-from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -80,8 +79,8 @@ import imblearn
 # Paths and constants copied from the notebook (same values, on purpose)
 # --------------------------------------------------------------------------
 HERE = Path(__file__).resolve().parent
-DASHBOARD = HERE.parent                 # Project-2/dashboard
-PROJECT2 = DASHBOARD.parent             # Project-2
+DASHBOARD = HERE.parent                 # Project-2-praiseemma-praiseemma/dashboard
+PROJECT2 = DASHBOARD.parent             # Project-2-praiseemma-praiseemma
 ARTIFACTS = DASHBOARD / "artifacts"
 DEMO_PATH = DASHBOARD / "data" / "demo_transactions.csv"
 
@@ -137,7 +136,7 @@ def load_and_clean(path: Path) -> tuple[pd.DataFrame, dict]:
     if not path.exists():
         raise SystemExit(
             f"\nCould not find the dataset at:\n  {path}\n"
-            "Put creditcard.csv in Project-2/data/ (it is not stored in git), "
+            "Put creditcard.csv in Project-2-praiseemma/data/ (it is not stored in git), "
             "or pass --data PATH."
         )
     log(f"Reading {path} ...")
@@ -379,7 +378,6 @@ def main() -> int:
 
     # ---- evaluate once on the untouched test set -------------------------
     baseline = DummyClassifier(strategy="most_frequent").fit(X_train, y_train)
-    b_proba = baseline.predict_proba(X_test)[:, 1]
     metrics = {
         "Baseline (always legitimate)": {
             "precision": 0.0, "recall": 0.0, "f1": 0.0,

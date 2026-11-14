@@ -7,14 +7,13 @@ reviewer sees it.
 
 from __future__ import annotations
 
-import numpy as np
 import pandas as pd
 import pytest
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, roc_auc_score
 
 from src import config
 
-NOTEBOOK = {                      # from Project-2/outputs/model_comparison.csv
+NOTEBOOK = {                      # from Project-2-praiseemma/outputs/model_comparison.csv
     "precision": 0.6016,
     "recall": 0.8105,
     "f1": 0.6906,

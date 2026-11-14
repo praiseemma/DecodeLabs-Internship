@@ -95,7 +95,7 @@ def setup_screen(status: dict) -> None:
               "One command produces the four files this app reads.")
     st.error(f"Missing: {', '.join(status['missing'])}")
     st.markdown(
-        "Open PowerShell in the `Project-2` folder and run:\n\n"
+        "Open PowerShell in the `Project-2-praiseemma` folder and run:\n\n"
         "```powershell\n"
         "& \"$env:USERPROFILE\\anaconda3\\python.exe\" dashboard\\scripts\\export_model.py\n"
         "```\n\n"
@@ -105,7 +105,7 @@ def setup_screen(status: dict) -> None:
     )
     st.caption(
         "The 150 MB dataset is deliberately not in the repository. It has to be in "
-        "`Project-2/data/creditcard.csv` for this command to work."
+        "`Project-2-praiseemma/data/creditcard.csv` for this command to work."
     )
     st.stop()
 

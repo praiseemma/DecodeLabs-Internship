@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from src import config, model, state, ui
+from src import model, state, ui
 
 results = state.results()
 info = results["model"]
@@ -125,7 +125,7 @@ st.divider()
 
 st.subheader("Reproducing this")
 st.markdown(
-    "From the `Project-2` folder, in PowerShell:\n\n"
+    "From the `Project-2-praiseemma` folder, in PowerShell:\n\n"
     "```powershell\n"
     "# 1. install the pinned versions (once)\n"
     "& \"$env:USERPROFILE\\anaconda3\\python.exe\" -m pip install -r dashboard\\requirements.txt\n\n"

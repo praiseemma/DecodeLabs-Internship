@@ -16,7 +16,7 @@ from pathlib import Path
 # Community Cloud (which starts the app from the repository root) behave the
 # same way.
 SRC_DIR = Path(__file__).resolve().parent
-APP_DIR = SRC_DIR.parent                     # Project-2/dashboard
+APP_DIR = SRC_DIR.parent                     # Project-2-praiseemma/dashboard
 ARTIFACTS_DIR = APP_DIR / "artifacts"
 DATA_DIR = APP_DIR / "data"
 
@@ -53,24 +53,14 @@ THRESHOLD_STEP = 0.01
 # --------------------------------------------------------------------------
 BLUE = "#1d5fd1"
 RED = "#d1432d"
-GREY = "#6b7280"
 GREEN = "#2e7d32"
 AMBER = "#b26a00"
-
-COLOURS = {0: BLUE, 1: RED}
-CLASS_NAMES = {0: "Legitimate", 1: "Fraud"}
 
 PLOTLY_CONFIG = {"displayModeBar": False, "responsive": True}
 
 # --------------------------------------------------------------------------
 # Wording reused across pages
 # --------------------------------------------------------------------------
-TEST_SET_WARNING = (
-    "**Training data only.** A threshold must be chosen on training data. "
-    "Picking it on the test set would mean the test score is no longer an "
-    "honest measure of how the model behaves on data it has never seen."
-)
-
 NOT_A_REAL_SYSTEM = (
     "This is an academic demo on a public dataset. It reads anonymised "
     "components (V1 to V28), not raw card data, so it cannot be pointed at a "
