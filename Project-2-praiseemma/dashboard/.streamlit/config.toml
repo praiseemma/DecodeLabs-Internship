@@ -1,0 +1,17 @@
+[theme]
+primaryColor = "#1d5fd1"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f6fb"
+textColor = "#1a1a1a"
+font = "sans serif"
+
+# No [theme.sidebar] block on purpose. Streamlit requires every colour in a
+# sidebar theme to be set, and treats the ones left out as empty strings, which
+# makes the front end warn in the browser console. The sidebar inherits the
+# light secondaryBackgroundColor above instead.
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
