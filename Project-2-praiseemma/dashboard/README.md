@@ -1,5 +1,7 @@
 ﻿# Fraud detection dashboard
 
+**Live app:** <https://decodelabs-internship-nqrofsyqqhd38nnzlf6ad2.streamlit.app/>
+
 A Streamlit app that serves the Random Forest from
 `Project-2-praiseemma/project2_fraud_detection_pipeline.ipynb`, plus the evidence behind it.
 
