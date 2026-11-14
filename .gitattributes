@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Saved binary model files: never convert or diff these as text.
+*.joblib binary
+*.npz binary
+*.gz binary

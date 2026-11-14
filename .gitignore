@@ -10,3 +10,7 @@ venv/
 Thumbs.db
 desktop.ini
 #Jupyter
+Data Split script.ipynb
+creditcard.csv
+*.csv.gz
+.pytest_cache/

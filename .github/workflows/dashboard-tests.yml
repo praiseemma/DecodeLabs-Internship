@@ -1,0 +1,33 @@
+name: dashboard tests
+
+# Runs the dashboard's test suite on every push and pull request.
+# The tests read the model and results committed in Project-2/dashboard/artifacts,
+# so nothing here needs the 150 MB dataset. The one test that does need it skips
+# itself when the file is absent.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: Project-2/dashboard/requirements.txt
+
+      - name: Install the pinned versions
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Project-2/dashboard/requirements.txt
+          pip install pytest
+
+      - name: Run the tests
+        working-directory: Project-2/dashboard
+        run: python -m pytest -q
