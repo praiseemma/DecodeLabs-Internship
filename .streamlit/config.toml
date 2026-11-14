@@ -1,4 +1,8 @@
+# Streamlit reads this file from the folder it is launched in. Community Cloud
+# launches from the repository root, so the theme lives here rather than next to
+# app.py. Run the app from the repository root too (see "Run it locally").
 [theme]
+base = "light"
 primaryColor = "#1d5fd1"
 backgroundColor = "#ffffff"
 secondaryBackgroundColor = "#f4f6fb"

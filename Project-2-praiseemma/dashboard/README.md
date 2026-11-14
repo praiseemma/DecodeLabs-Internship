@@ -28,7 +28,6 @@ refuses to finish unless it does.
 | `data/demo_transactions.csv` | 2,473-row sample: all 473 frauds plus 2,000 legitimate transactions. |
 | `tests/` | 82 pytest checks: input rules, scoring, the saved numbers, the committed artifacts, and every page rendered through Streamlit's own test runner. |
 | `requirements.txt` | The pinned library versions the model was saved with. |
-| `.streamlit/config.toml` | Theme colours, `headless = true` (no browser tab opens) and usage statistics off. |
 | `pytest.ini` | Tells pytest where the tests are and hides one noisy warning. |
 
 Everything above lives in `dashboard/`. One level up, in `Project-2-praiseemma/`:
@@ -42,20 +41,27 @@ Everything above lives in `dashboard/`. One level up, in `Project-2-praiseemma/`
 | `Data Split script.ipynb` | Splits that file into the four `creditcard_part*.csv.gz` files. Not committed. |
 | `creditcard_part*.csv.gz` | The same dataset in four gzip parts, 65 MB in total. Not committed. |
 
+The theme, `headless = true` and the usage-statistics setting live in
+`.streamlit/config.toml` **at the repository root**, not in this folder. Streamlit
+reads configuration from the directory it is launched in, and Community Cloud
+launches from the root; the local instructions below do the same.
+
 ---
 
 ## Run it locally (Windows, PowerShell)
 
-Open **PowerShell**, then move into the dashboard folder:
+Open **PowerShell**, then move into the **repository root**. Streamlit reads
+`.streamlit/config.toml` from the folder it is launched in, so run it from here
+rather than from `dashboard/`:
 
 ```powershell
-cd "$env:USERPROFILE\Documents\GitHub\DecodeLabs-Internship\Project-2-praiseemma\dashboard"
+cd "$env:USERPROFILE\Documents\GitHub\DecodeLabs-Internship"
 ```
 
 **Step 1 — install the pinned libraries** (once; a few minutes):
 
 ```powershell
-& "$env:USERPROFILE\anaconda3\python.exe" -m pip install -r requirements.txt
+& "$env:USERPROFILE\anaconda3\python.exe" -m pip install -r Project-2-praiseemma\dashboard\requirements.txt
 ```
 
 This installs the exact versions the model was saved with. Running a pickled
@@ -65,7 +71,7 @@ which is why the versions are pinned rather than "latest".
 **Step 2 — start the app:**
 
 ```powershell
-& "$env:USERPROFILE\anaconda3\python.exe" -m streamlit run app.py
+& "$env:USERPROFILE\anaconda3\python.exe" -m streamlit run Project-2-praiseemma\dashboard\app.py
 ```
 
 Open `http://localhost:8501` in your browser. It does not open by itself:
@@ -77,9 +83,10 @@ PowerShell to stop it yourself.
 > full path above avoids that. If your Anaconda lives somewhere else, run
 > `Get-Command python` in a fresh PowerShell and use the path it prints.
 
-**Optional — check everything still works:**
+**Optional — check everything still works** (run these from the dashboard folder):
 
 ```powershell
+cd Project-2-praiseemma\dashboard
 & "$env:USERPROFILE\anaconda3\python.exe" -m pytest -q
 ```
 
@@ -172,7 +179,7 @@ page.
 | Decision | Reason |
 |---|---|
 | Model loaded with `st.cache_resource`, data with `st.cache_data` | Loading the pickle takes about a second; doing it on every click is waste. Data is copied per visitor so one person cannot change what another sees. |
-| Paths built from `__file__` | Streamlit Cloud starts apps from the repository root while you start them from `dashboard/`. Hard-coded relative paths break in one of those two places. |
+| Paths built from `__file__` | The app runs from the repository root on Cloud and can be started from anywhere locally. Hard-coded relative paths break as soon as the working directory changes. |
 | One `validate_batch` used by both entry points | A rule duplicated in two places gets fixed in one of them. The single-row form goes through the same code as the CSV upload. |
 | Every failure caught and rewritten | A visitor should read "this file has 2 empty values in `V7`", not a stack trace. |
 | No accuracy as a model score | The baseline scores 99.83% accuracy and catches no fraud. Precision, recall, F1, ROC-AUC and average precision instead. |
